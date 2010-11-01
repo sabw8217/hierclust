@@ -12,23 +12,19 @@ module Hierclust
       @items = items
     end
     
-    # Returns the average x-coordinates of all items in this Cluster.
-    def x
+    # Returns the average coordinates of all items in this Cluster.
+    def coordinates
       return nil if size == 0
-      points = self.points
-      @x ||= points.inject(0.0) {|sum, p| sum + p.x} / points.size
+      @coordinates ||= begin
+        coords = self.points.map {|p| p.coordinates }
+        coords = coords.shift.zip(*coords)
+        coords.map {|points| points.inject(0.0) {|sum, p| sum + p } / points.size }
+      end
     end
 
-    # Returns the average y-coordinates of all items in this Cluster.
-    def y
-      return nil if size == 0
-      points = self.points
-      @y ||= points.inject(0.0) {|sum, p| sum + p.y} / points.size
-    end
-    
     # Add an +item+ to this Cluster.
     def <<(item)
-      @x, @y = nil, nil # flush cached pseudo-attributes
+      @coordinates = nil
       @items << item
     end
     

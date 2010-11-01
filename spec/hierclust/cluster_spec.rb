@@ -7,11 +7,7 @@ module Hierclust
     end
 
     it "should have nil x-coordinate" do
-      @c.x.should be_nil
-    end
-
-    it "should have nil y-coordinate" do
-      @c.y.should be_nil
+      @c.coordinates.should be_nil
     end
 
     it "should have nil radius" do
@@ -27,12 +23,12 @@ module Hierclust
       @c = Cluster.new([@p])
     end
 
-    it "should have the same x-coordinate as the point" do
-      @c.x.should == @p.x
+    it "should have the same coordinates as the point" do
+      @c.coordinates.should == @p.coordinates
     end
 
-    it "should have the same y-coordinate as the point" do
-      @c.y.should == @p.y
+    it "should have the same coordinates as used to create the point" do
+      @c.coordinates.should == [@x, @y]
     end
 
     it "should have 0 radius" do
@@ -50,12 +46,8 @@ module Hierclust
       @points = @c.points
     end
 
-    it "should have x-coordinate at average of point's x-coordinates" do
-      @c.x.should == 10
-    end
-
-    it "should have y-coordinate at average of point's y-coordinates" do
-      @c.y.should == 6
+    it "should have coordinates at the average of points' coordinates" do
+      @c.coordinates.should == [10, 6]
     end
 
     it "should have two points" do
@@ -91,12 +83,8 @@ module Hierclust
       @c_2.points.size.should == 3
     end
 
-    it "should have x-coordinate at average of point's x-coordinates" do
-      @c_2.x.should == 2
-    end
-
-    it "should have y-coordinate at average of point's y-coordinates" do
-      @c_2.y.should == 3
+    it "should have coordinates at the average of points' coordinates" do
+      @c_2.coordinates.should == [2, 3]
     end
   end
 end

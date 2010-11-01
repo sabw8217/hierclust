@@ -40,10 +40,8 @@ module Hierclust
       case @data.length
       when 0
         []
-      when 1
-        [Cluster.new([@data[0]])]
-      when 2
-        [Cluster.new([@data[0], @data[1]])]
+      when 1, 2
+        [Cluster.new(@data)]
       else
         nearest = @distances.nearest
         outliers = @distances.outliers
@@ -52,11 +50,8 @@ module Hierclust
     end
     
     def precluster(points)
-      if @resolution.nil?
+      unless @resolution && @separation
         # preclustering is only applicable given lower bound on resolution
-        return points.dup
-      end
-      if @separation.nil?
         # can't precluster w/ no min separation given
         return points.dup
       end
@@ -64,16 +59,12 @@ module Hierclust
         # if no separation is asked for, it's all one cluster
         return [Cluster.new(points)]
       end
-      grid_size = @resolution
-      grid_clusters = Hash.new
-      points.each do |point|
-        grid_x = (point.x / grid_size).floor
-        grid_y = (point.y / grid_size).floor
-        grid_clusters[grid_x] ||= Hash.new
-        grid_clusters[grid_x][grid_y] ||= Cluster.new([])
-        grid_clusters[grid_x][grid_y] << point
-      end
-      grid_clusters.values.map{|h| h.values}.flatten
+      points.inject({}) do |grid_clusters, point|
+        grid_coordinates = point.coordinates.map {|coord| (coord / @resolution).floor }
+        grid_clusters[grid_coordinates] ||= Cluster.new([])
+        grid_clusters[grid_coordinates] << point
+        grid_clusters
+      end.values
     end
   end
 end

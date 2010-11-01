@@ -1,21 +1,20 @@
 module Hierclust
-  # A Point represents a single point in 2-dimensional space.
+  # A Point represents a single point in n-dimensional space.
   class Point
     # x-coordinate
-    attr_accessor :x
-
-    # y-coordinate
-    attr_accessor :y
+    attr_accessor :coordinates
     
-    # Create a new Point with the given x- and y-coordinates.
-    def initialize(x, y)
-      @x = x
-      @y = y
+    # Create a new Point with the given coordinates.
+    def initialize(*coordinates)
+      @coordinates = coordinates
     end
     
     # Returns this distance from this Point to an +other+ Point.
     def distance_to(other)
-      Math.sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)  
+      sum_of_squares = coordinates.zip(other.coordinates).map do |point, other_point|
+        (other_point - point) ** 2
+      end.reduce(:+)
+      Math.sqrt(sum_of_squares)
     end
     
     # Simplifies code by letting us treat Clusters and Points interchangeably
@@ -35,7 +34,7 @@ module Hierclust
     
     # Returns a legible representation of this Point.
     def to_s
-      "(#{x}, #{y})"
+      "(#{coordinates.join(', ')})"
     end
     
     # Sorts points relative to each other on the x-axis.
@@ -46,10 +45,9 @@ module Hierclust
     # Uses object_id as a final tie-breaker, so sorts are guaranteed to
     # be stable even when multiple points have the same coordinates.
     def <=>(other)
-      cmp = self.x <=> other.x
-      cmp = self.y <=> other.y if cmp == 0
-      cmp = self.object_id <=> other.object_id if cmp == 0
-      return cmp
+      cmp = coordinates <=> other.coordinates
+      cmp = object_id <=> other.object_id if cmp == 0
+      cmp
     end
   end
 end

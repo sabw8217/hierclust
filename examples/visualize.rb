@@ -21,13 +21,13 @@ print %Q{<?xml version="1.0" standalone="no"?>
 def plot(cluster)
   if cluster.kind_of? Hierclust::Cluster
     print %Q{
-      <circle cx="#{cluster.x}" cy="#{cluster.y}" r="#{cluster.radius}"
+      <circle cx="#{cluster.coordinates[0]}" cy="#{cluster.coordinates[1]}" r="#{cluster.radius}"
               fill="none" stroke="black" stroke-width="#{cluster.items}"/>
     }
     cluster.items.each {|item| plot(item)}
   else
     print %Q{
-      <circle cx="#{cluster.x}" cy="#{cluster.y}" r="2"
+      <circle cx="#{cluster.coordinates[0]}" cy="#{cluster.coordinates[1]}" r="2"
               fill="red" stroke="none"/>
     }
   end
