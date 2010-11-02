@@ -13,7 +13,7 @@ require 'syntax/convertors/html'
 require 'erb'
 require File.dirname(__FILE__) + '/../lib/hierclust/version.rb'
 
-version  = Hierclust::VERSION::STRING
+version  = File.exist?('../VERSION') ? File.read('../VERSION') : ""
 download = 'http://rubyforge.org/projects/hierclust'
 
 class Fixnum

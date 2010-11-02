@@ -1,9 +1,9 @@
-begin
-  require 'spec'
-rescue LoadError
-  require 'rubygems'
-  gem 'rspec'
-  require 'spec'
-end
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'hierclust'
+require 'spec'
+require 'spec/autorun'
 
-require File.dirname(__FILE__) + '/../lib/hierclust'
+Spec::Runner.configure do |config|
+  
+end

@@ -2,6 +2,8 @@
 
 * 1 major enhancement:
   * Clustering & Points now support N dimensions (up from 2)
+* 1 minor enhancement:
+  * Switch to jeweler
 
 == 0.1.5 2008-03-21
 
