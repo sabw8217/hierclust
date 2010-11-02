@@ -2,7 +2,6 @@ module Hierclust
   # A Point represents a single point in n-dimensional space.
   class Point
     # x-coordinate
-    attr_accessor :coordinates
     attr_accessor :data
     
     # Create a new Point with the given coordinates.
@@ -11,10 +10,18 @@ module Hierclust
       @coordinates = coordinates.flatten
     end
     
+    def coordinates(nils = nil)
+      if nils
+        @coordinates.map {|c| c || nils }
+      else
+        @coordinates
+      end
+    end
+
     # Returns this distance from this Point to an +other+ Point.
     def distance_to(other, nils = nil)
-      sum_of_squares = coordinates.zip(other.coordinates).map do |point, other_point|
-        ((other_point || nils) - (point || nils)) ** 2
+      sum_of_squares = coordinates(nils).zip(other.coordinates(nils)).map do |point, other_point|
+        (other_point - point) ** 2
       end.inject(0) {|sum, distance| sum + distance }
       Math.sqrt(sum_of_squares)
     end

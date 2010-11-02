@@ -13,10 +13,10 @@ module Hierclust
     end
     
     # Returns the average coordinates of all items in this Cluster.
-    def coordinates
+    def coordinates(nils = nil)
       return nil if size == 0
       @coordinates ||= begin
-        coords = self.points.map {|p| p.coordinates }
+        coords = self.points.map {|p| p.coordinates(nils) }
         coords = coords.shift.zip(*coords)
         coords.map {|points| points.inject(0.0) {|sum, p| sum + p } / points.size }
       end
