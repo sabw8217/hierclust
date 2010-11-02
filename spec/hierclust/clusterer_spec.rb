@@ -110,7 +110,7 @@ module Hierclust
 
       describe "and separation 1" do
         before do
-          @c = Clusterer.new(@points, 1)
+          @c = Clusterer.new(@points, :separation => 1)
         end
 
         it "should return all four individual points" do
@@ -120,7 +120,7 @@ module Hierclust
 
       describe "and separation 2" do
         before do
-          @c = Clusterer.new(@points, 2)
+          @c = Clusterer.new(@points, :separation => 2)
         end
 
         it "should return two clusters" do
@@ -155,7 +155,7 @@ module Hierclust
 
       describe "and separation 1" do
         before do
-          @clusters = Clusterer.new(@points, 1).clusters.sort
+          @clusters = Clusterer.new(@points, :separation => 1).clusters.sort
         end
 
         it "should have all eight points in individual clusters" do
@@ -166,7 +166,7 @@ module Hierclust
       describe "and separation 3" do
         describe "with no resolution limit" do
           before do
-            @clusters = Clusterer.new(@points, 3).clusters.sort
+            @clusters = Clusterer.new(@points, :separation => 3).clusters.sort
           end
 
           it "should have three clusters" do
@@ -186,7 +186,7 @@ module Hierclust
 
         describe "with coarse resolution" do
           before do
-            @clusters = Clusterer.new(@points, 3, 5).clusters.sort
+            @clusters = Clusterer.new(@points, :separation => 3, :resolution => 5).clusters.sort
           end
 
           it "should have three clusters" do

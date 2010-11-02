@@ -2,6 +2,7 @@
 
 * 1 minor enhancement
   * Flatten incoming Point coordinates so that we can pass them as an array as well
+  * Make Clusterer resolution and separation arguments hash-based
 
 == 0.2.1 2010-11-01
 
