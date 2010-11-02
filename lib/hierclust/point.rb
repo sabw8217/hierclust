@@ -8,7 +8,7 @@ module Hierclust
     # Create a new Point with the given coordinates.
     def initialize(*coordinates)
       @data = coordinates.last.is_a?(Hash) ? coordinates.pop : {}
-      @coordinates = coordinates
+      @coordinates = coordinates.flatten
     end
     
     # Returns this distance from this Point to an +other+ Point.
