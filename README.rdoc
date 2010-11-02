@@ -9,9 +9,9 @@ A simple hierarchical clustering library for spatial data.
   clusterer = Hierclust::Clusterer.new(points)
   puts clusterer.clusters => [[[(4, 9), (4, 8)], (9, 6)], [[(1, 4), (3, 1)], (6, 3)]]
 
-== Contact
+== Contact for this fork
 
-Brandt Kurowski <brandt@kurowski.net>
+Ben Woosley <ben.woosley@gmail.com>
 
 == Note on Patches/Pull Requests
  

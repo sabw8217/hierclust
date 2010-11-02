@@ -4,10 +4,10 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "hierclust"
+    gem.name = "Empact-hierclust"
     gem.summary = %Q{performs hierarchical clustering in N dimensions}
     gem.description = %Q{performs hierarchical clustering on points in Euclidian space}
-    gem.email = "brandt@kurowski.net"
+    gem.email = "ben.woosley@gmail.com"
     gem.homepage = "http://github.com/Empact/hierclust"
     gem.authors = ["Brandt Kurowski", "Ben Woosley"]
     gem.rubyforge_project = "hierclust"

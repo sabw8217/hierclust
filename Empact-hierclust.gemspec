@@ -4,27 +4,27 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{hierclust}
+  s.name = %q{Empact-hierclust}
   s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brandt Kurowski", "Ben Woosley"]
   s.date = %q{2010-11-01}
   s.description = %q{performs hierarchical clustering on points in Euclidian space}
-  s.email = %q{brandt@kurowski.net}
+  s.email = %q{ben.woosley@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
   ]
   s.files = [
     ".gitignore",
+     "Empact-hierclust.gemspec",
      "History.txt",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
      "VERSION",
      "examples/visualize.rb",
-     "hierclust.gemspec",
      "lib/hierclust.rb",
      "lib/hierclust/cluster.rb",
      "lib/hierclust/clusterer.rb",
