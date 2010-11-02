@@ -1,4 +1,4 @@
-== Pending Release
+== 0.2.0 2010-11-01
 
 * 1 major enhancement:
   * Clustering & Points now support N dimensions (up from 2)
