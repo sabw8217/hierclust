@@ -129,6 +129,35 @@ module Hierclust
       end
     end
 
+    describe "with missing values" do
+      before do
+        @points = [
+          Point.new(0, 1),
+          Point.new(1, 0),
+          Point.new(nil, 4),
+          Point.new(4, 3),
+        ]
+      end
+
+      describe "and no stand-in" do
+        it "should raise and error" do
+          lambda {
+            Clusterer.new(@points)
+          }.should raise_error
+        end
+      end
+
+      describe "with a stand-in" do
+        before do
+          @c = Clusterer.new(@points, :nils => 3, :separation => 1)
+        end
+        
+        it "should cluster as though the missing data were the stand-in" do
+          @c.clusters.size.should == 4
+        end
+      end
+    end
+
     describe "with eight points" do
       before do
         @points = [

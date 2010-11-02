@@ -19,15 +19,16 @@ module Hierclust
     def initialize(data, options = {})
       @separation = options.delete(:separation)
       @resolution = options.delete(:resolution)
+      @nils = options.delete(:nils)
       @data = precluster(data)
-      @distances = Distances.new(@data)
+      @distances = Distances.new(@data, @nils)
     end
 
     # Calculates and returns the set of clusters.
     def clusters
       return @data if @separation && @distances.separation > @separation
       while @data.length > 1
-        @distances = Distances.new(@data)
+        @distances = Distances.new(@data, @nils)
         return @data if @separation && @distances.separation > @separation
         @data = find_cluster
       end

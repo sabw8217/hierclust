@@ -4,7 +4,7 @@ module Hierclust
     attr_reader :nearest, :outliers, :separation
 
     # Create a new Distances for the given +items+
-    def initialize(items)
+    def initialize(items, nils = nil)
       @items = items
       @separation = 0
       @nearest = []
@@ -12,7 +12,7 @@ module Hierclust
       while !items.empty?
         origin = items.shift
         items.each do |other|
-          distance = origin.distance_to(other)
+          distance = origin.distance_to(other, nils)
           if @separation == 0 or distance < @separation
             @separation = distance
             @nearest = [origin, other]
