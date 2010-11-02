@@ -1,3 +1,8 @@
+== 0.2.1 2010-11-01
+
+* 1 minor enhancement
+  * Add Point#data, which is set to the options hash from the initializer
+
 == 0.2.0 2010-11-01
 
 * 1 major enhancement:

@@ -3,9 +3,11 @@ module Hierclust
   class Point
     # x-coordinate
     attr_accessor :coordinates
+    attr_accessor :data
     
     # Create a new Point with the given coordinates.
     def initialize(*coordinates)
+      @data = coordinates.last.is_a?(Hash) ? coordinates.pop : {}
       @coordinates = coordinates
     end
     
