@@ -13,7 +13,7 @@ module Hierclust
     def distance_to(other)
       sum_of_squares = coordinates.zip(other.coordinates).map do |point, other_point|
         (other_point - point) ** 2
-      end.reduce(:+)
+      end.inject(0) {|sum, distance| sum + distance }
       Math.sqrt(sum_of_squares)
     end
     
