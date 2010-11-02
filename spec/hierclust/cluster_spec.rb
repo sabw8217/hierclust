@@ -64,6 +64,70 @@ module Hierclust
     end
   end
 
+  describe Cluster, " with two points and data" do
+    before do
+      @x_1, @x_2 = 5, 15
+      @y_1, @y_2 = 4, 8
+      @p_1 = Point.new(@x_1, @y_1, :name => 'foo')
+      @p_2 = Point.new(@x_2, @y_2, :name => 'bar')
+      @c = Cluster.new([@p_1, @p_2])
+      @points = @c.points
+    end
+
+    it "should have coordinates at the average of points' coordinates" do
+      @c.coordinates.should == [10, 6]
+    end
+
+    it "should have two points" do
+      @points.size.should == 2
+    end
+
+    it "should include both points" do
+      @points.should include(@p_1, @p_2)
+    end
+
+    it "should retain the data on the points" do
+      @points.map(&:data).should =~ [{:name => 'foo'}, {:name => 'bar'}]
+    end
+
+    it "should have correct radius" do
+      radius = Math.sqrt((@x_1 - @x_2) ** 2 + (@y_1 - @y_2) ** 2) / 2.0
+      @c.radius.should == radius
+    end
+  end
+
+  describe Cluster, " with an array of two points and data" do
+    before do
+      @x_1, @x_2 = 5, 15
+      @y_1, @y_2 = 4, 8
+      @p_1 = Point.new([@x_1, @y_1], :name => 'foo')
+      @p_2 = Point.new([@x_2, @y_2], :name => 'bar')
+      @c = Cluster.new([@p_1, @p_2])
+      @points = @c.points
+    end
+
+    it "should have coordinates at the average of points' coordinates" do
+      @c.coordinates.should == [10, 6]
+    end
+
+    it "should have two points" do
+      @points.size.should == 2
+    end
+
+    it "should include both points" do
+      @points.should include(@p_1, @p_2)
+    end
+
+    it "should retain the data on the points" do
+      @points.map(&:data).should =~ [{:name => 'foo'}, {:name => 'bar'}]
+    end
+
+    it "should have correct radius" do
+      radius = Math.sqrt((@x_1 - @x_2) ** 2 + (@y_1 - @y_2) ** 2) / 2.0
+      @c.radius.should == radius
+    end
+  end
+
   describe Cluster, " with one point and one cluster" do
     before do
       @x_1, @x_2, @x_3 = 1, 2, 3
