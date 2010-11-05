@@ -51,9 +51,8 @@ module Hierclust
     end
     
     def precluster(points)
-      unless @resolution && @separation
+      unless @resolution
         # preclustering is only applicable given lower bound on resolution
-        # can't precluster w/ no min separation given
         return points.dup
       end
       if @separation == 0
@@ -61,7 +60,7 @@ module Hierclust
         return [Cluster.new(points)]
       end
       points.inject({}) do |grid_clusters, point|
-        grid_coordinates = point.coordinates.map {|coord| (coord / @resolution).floor }
+        grid_coordinates = point.coordinates.map {|coord| ((coord || @nils) / @resolution).floor }
         grid_clusters[grid_coordinates] ||= Cluster.new([])
         grid_clusters[grid_coordinates] << point
         grid_clusters
