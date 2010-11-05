@@ -1,3 +1,11 @@
+== 0.3.0 2010-11-05
+
+* 1 api change
+  * Clusterer.cluster takes a hash of options, rather than positional arguments for resolution & separation
+* 2 minor enhancements
+  * Pass the :nils option to Cluster.cluster to provide a stand-in for nil values
+  * Allow Clusterer.cluster to apply resolution without separation
+
 == 0.2.2 2010-11-01
 
 * 1 minor enhancement
