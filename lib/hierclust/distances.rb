@@ -4,35 +4,51 @@ module Hierclust
   # Represents the pair-wise distances between a set of items.
   class Distances
     attr_reader :nearest, :outliers, :separation
-    attr_reader :matrix, :item_indexes
+    attr_reader :matrix, :nils, :items
 
     # Create a new Distances for the given +items+
     def initialize(items, nils = nil)
-      @items = items
+      @items = items.dup
       @separation = 0
       @nearest = []
-      @item_indexes = {}
-      index = 0
-      items = @items.dup
-      upper_triangular = Matrix.build(items.count, items.count) do |i,j|
-        if i < j
-          distance = items[i].distance_to(items[j], nils)
-          if distance < @separation
-            @separation = distance
-            @nearest = [items[i], items[j]]
+      @nils = nils
+      item_count = items.count
+      @matrix = Matrix.zero(items.count, items.count).to_a
+      (0..item_count - 1).each do |i|
+        (i..item_count - 1).each do |j|
+          if j != i
+            distance = items[i].distance_to(items[j], nils)
+            if distance < @separation || @separation == 0
+              @separation = distance
+              @nearest = [items[i], items[j]]
+            end
+            @matrix[i][j] = distance
+            @matrix[j][i] = distance
           end
-        else
-          0
         end
       end
+      @outliers = @items - @nearest
 
-      @matrix = Matrix.build(items.count,items.count) do |i,j|
-        if i < j
-          upper_triangular[i,j]
-        else
-          upper_triangular[j,i]
-        end
-      end
+      #upper_triangular = Matrix.build(items.count, items.count) do |i,j|
+      #  if i < j
+      #    distance = items[i].distance_to(items[j], nils)
+      #    if distance < @separation || @separation == 0
+      #      @separation = distance
+      #      @nearest = [items[i], items[j]]
+      #    end
+      #    distance
+      #  else
+      #    0
+      #  end
+      #end
+      #
+      #@matrix = Matrix.build(items.count,items.count) do |i,j|
+      #  if i < j
+      #    upper_triangular[i,j]
+      #  else
+      #    upper_triangular[j,i]
+      #  end
+      #end
       #
       #while !items.empty?
       #  origin = items.shift
@@ -47,7 +63,87 @@ module Hierclust
       #    end
       #  end
       #end
+    end
+
+    # return the best cluster, updating the matrix and
+    # nearest, and outliers
+    def pop_next_cluster
+      cluster = Cluster.new(nearest)
+      ind1 = items.index(nearest[0])
+      ind2 = items.index(@nearest[1])
+
+      # yeah....
+      delete_first = [ind1,ind2].max
+      delete_after = [ind1,ind2].min
+
+      # start slicing and dicing, lets get rid of the old items
+      # and add our shiny new cluster
+      items.delete_at(delete_first)
+      items.delete_at(delete_after)
+      items.push(cluster)
+
+      # figure out what the distance to the new cluster is
+      # Note: to implement single linkage clustering we need to
+      # change this
+      new_distances = items.map{|i|cluster.distance_to(i, nils)}
+
+      # delete the rows for the clustered items
+      matrix.delete_at(delete_first)
+      matrix.delete_at(delete_after)
+
+      # add a new column on to the matrix for the surviving items
+      matrix.each_with_index do |row,i|
+        row.delete_at(delete_first)
+        row.delete_at(delete_after)
+        row.push(new_distances[i])
+      end
+
+      # add the new row for the new cluster
+      matrix.push(new_distances)
+
+      # find the next cluster. This could be done more efficiently...
+      @separation = 0
+      matrix.each_with_index do |row,i|
+        row.each_with_index do |distance,j|
+          if i != j
+            if distance < separation || separation == 0
+              @separation = distance
+              @nearest = [items[i], items[j]]
+            end
+          end
+        end
+      end
+
       @outliers = @items - @nearest
+      cluster
+
+      #
+      #new_dim = @items.count - 1
+      #@matrix = Matrix.build(new_dim, new_dim) do |i,j|
+      #  if i == new_dim || j == new_dim
+      #    # if this is the last row or column, just fill it full of zeros for now
+      #    0
+      #  else
+      #    x_offset = 0
+      #    y_offset = 0
+      #    # if we are updating a row or column that is past one of the rows or columns that we
+      #    # are updating, we need to offset where we are drawing from the source matrix
+      #    if ind1 >= i
+      #      x_offset += 1
+      #    end
+      #    if ind2 >= j
+      #      x_offset += 1
+      #    end
+      #    if ind1 >= j
+      #      y_offset += 1
+      #    end
+      #    if ind2 >= j
+      #      y_offset += 1
+      #    end
+      #
+      #    @matrix[i + x_offset, j + y_offset]
+      #  end
+      #end
     end
 
 =begin

@@ -44,9 +44,8 @@ module Hierclust
       when 1, 2
         [Cluster.new(@data)]
       else
-        nearest = @distances.nearest
         outliers = @distances.outliers
-        [Cluster.new(nearest), *outliers]
+        [@distances.pop_next_cluster, *outliers]
       end
     end
     
