@@ -82,19 +82,30 @@ module Hierclust
       items.delete_at(delete_after)
       items.push(cluster)
 
-      # figure out what the distance to the new cluster is
-      # Note: to implement single linkage clustering we need to
-      # change this
-      new_distances = items.map{|i|cluster.distance_to(i, nils)}
+      # http://en.wikipedia.org/wiki/Single-linkage_clustering
+      # delete the rows for the clustered items, then delete
+      # the distances for the items that are getting clustered
+      row1 = matrix.delete_at(delete_first)
+      row1.delete_at(delete_first)
+      row1.delete_at(delete_after)
+      row2 = matrix.delete_at(delete_after)
+      row2.delete_at(delete_first)
+      row2.delete_at(delete_after)
 
-      # delete the rows for the clustered items
-      matrix.delete_at(delete_first)
-      matrix.delete_at(delete_after)
+      # figure out the distances for the new cluster to all the
+      # remaining points
+      new_distances = (0..(row1.count - 1)).collect do |i|
+        [row1[i], row2[i]].min
+      end
+      # new cluster is 0 distance from itself
+      new_distances.push(0)
 
-      # add a new column on to the matrix for the surviving items
+      # remove the distances to the clustered items in
+      # each remaining row
       matrix.each_with_index do |row,i|
         row.delete_at(delete_first)
         row.delete_at(delete_after)
+        # and add the distance to the new cluster to each remaining row
         row.push(new_distances[i])
       end
 
@@ -116,34 +127,6 @@ module Hierclust
 
       @outliers = @items - @nearest
       cluster
-
-      #
-      #new_dim = @items.count - 1
-      #@matrix = Matrix.build(new_dim, new_dim) do |i,j|
-      #  if i == new_dim || j == new_dim
-      #    # if this is the last row or column, just fill it full of zeros for now
-      #    0
-      #  else
-      #    x_offset = 0
-      #    y_offset = 0
-      #    # if we are updating a row or column that is past one of the rows or columns that we
-      #    # are updating, we need to offset where we are drawing from the source matrix
-      #    if ind1 >= i
-      #      x_offset += 1
-      #    end
-      #    if ind2 >= j
-      #      x_offset += 1
-      #    end
-      #    if ind1 >= j
-      #      y_offset += 1
-      #    end
-      #    if ind2 >= j
-      #      y_offset += 1
-      #    end
-      #
-      #    @matrix[i + x_offset, j + y_offset]
-      #  end
-      #end
     end
 
 =begin

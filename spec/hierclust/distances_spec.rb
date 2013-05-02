@@ -98,6 +98,7 @@ module Hierclust
 
       @d.nearest.should include(nearest, @p_2)
       @d.separation.should == @d.matrix[1][0]
+      @d.matrix[1][0].should == @d.matrix[0][1]
     end
   end
 end
