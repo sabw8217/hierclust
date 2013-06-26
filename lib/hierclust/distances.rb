@@ -28,51 +28,18 @@ module Hierclust
         end
       end
       @outliers = @items - @nearest
-
-      #upper_triangular = Matrix.build(items.count, items.count) do |i,j|
-      #  if i < j
-      #    distance = items[i].distance_to(items[j], nils)
-      #    if distance < @separation || @separation == 0
-      #      @separation = distance
-      #      @nearest = [items[i], items[j]]
-      #    end
-      #    distance
-      #  else
-      #    0
-      #  end
-      #end
-      #
-      #@matrix = Matrix.build(items.count,items.count) do |i,j|
-      #  if i < j
-      #    upper_triangular[i,j]
-      #  else
-      #    upper_triangular[j,i]
-      #  end
-      #end
-      #
-      #while !items.empty?
-      #  origin = items.shift
-      #  @item_indexes[origin] = index
-      #  index += 1
-      #
-      #  items.each do |other|
-      #    distance = origin.distance_to(other, nils)
-      #    if @separation == 0 or distance < @separation
-      #      @separation = distance
-      #      @nearest = [origin, other]
-      #    end
-      #  end
-      #end
     end
 
     # return the best cluster, updating the matrix and
     # nearest, and outliers
     def pop_next_cluster
+      # Make a new cluster, and remember what the indices of the two
+      # items that are being grouped in the cluster are
       cluster = Cluster.new(nearest)
       ind1 = items.index(nearest[0])
-      ind2 = items.index(@nearest[1])
+      ind2 = items.index(nearest[1])
 
-      # yeah....
+      # It's best to delete these in the correct order ;-)
       delete_first = [ind1,ind2].max
       delete_after = [ind1,ind2].min
 
@@ -128,27 +95,5 @@ module Hierclust
       @outliers = @items - @nearest
       cluster
     end
-
-=begin
-
-old idea
-
-1 calculate all distances
-2 update distances when a new cluster is created from two existing points
-3 keep distances sorted by separation so that we always know which is shortest
-
-new idea
-
-don't worry about the lower level clusters
-don't worry about the higher level clusters
-just form clusters of the desired separation
-start by dividing the points into a grid of 0.5 * sep
-and put all points in the same grid cells together
-...
-and then do regular hierarchical clustering! we should be fine at that point.
-sweet....
-
-=end
-
   end
 end
